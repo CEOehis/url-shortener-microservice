@@ -47,14 +47,23 @@ module.exports = {
   // retrieve a url from its short url
   expand: function(req, res, next) {
     var shortUrl = req.params.shortUrl;
-    var urlId = atob(shortUrl);
+    var urlId = Number(atob(shortUrl));
 
+    // urlId must now be a number since thats what we originally save on the db
+    if(Number.isNaN(urlId)) {
+      // definitely not from our microservice
+      return res.send({ error: 'This url is not a valid url on our service'});
+    }
     Url.findById(urlId, function(err, url) {
       if(err) {
         return next(err);
       }
-      console.log(url);
-      res.redirect('http://' + url.url);
+      if(!url) {
+        // doesn't exist on our db
+        return res.send({ error: 'This url does not exist on our database '});
+      }
+      // url found: redirect to it
+      res.redirect(url.url);
     })
   }
 
