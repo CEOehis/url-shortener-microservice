@@ -24,7 +24,7 @@ module.exports = {
       }
       if(foundUrl) {
         // otherwise url already exists. no need rehashing, just return url id
-        console.log('url was already exists');
+        console.log('url was already on database');
         shortened.short_url = projectUrl + '/' + btoa(foundUrl._id);
         // return short url to user
         res.send(shortened);

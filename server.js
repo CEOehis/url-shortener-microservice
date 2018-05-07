@@ -40,7 +40,8 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'pug');
 
 app.get('/', function(req, res) {
-  res.render('index', {title: 'url-shortener'});
+  var projectUrl = req.protocol + '://' + req.get('host');
+  res.render('index', {title: 'Url-shortener-microservice', projectUrl});
 });
 
 app.get('/:shortUrl', shortenController.expand);
