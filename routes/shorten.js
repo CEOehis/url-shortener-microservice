@@ -3,6 +3,6 @@ var router = express.Router();
 
 var shortenController = require('../controllers/shortenController');
 
-router.get('/:url', shortenController.shorten);
+router.get('*', shortenController.shorten);
 
 module.exports = router;

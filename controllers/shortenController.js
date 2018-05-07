@@ -1,29 +1,31 @@
 var Url = require('../models/url');
 var btoa = require('btoa');
+var atob = require('atob');
 
 module.exports = {
 
   // create short url
   shorten: function(req, res, next) {
-
+    var projectUrl = req.protocol + '://' + req.get('host');
+    var urlToBeShortened = req.params['0'].slice(1);
     // object to hold shortener result
     var shortened = {
-      original_url: req.params.url
+      original_url: urlToBeShortened
     };
 
     var url = new Url({
-      url: req.params.url,
+      url: urlToBeShortened,
     });
 
     // check to see if url exist on db before saving
-    Url.findOne({ 'url': req.params.url }, function(err, foundUrl) {
+    Url.findOne({ 'url': urlToBeShortened }, function(err, foundUrl) {
       if(err) {
         return next(err);
       }
       if(foundUrl) {
         // otherwise url already exists. no need rehashing, just return url id
         console.log('url was already exists');
-        shortened.short_url = btoa(foundUrl._id);
+        shortened.short_url = projectUrl + '/' + btoa(foundUrl._id);
         // return short url to user
         res.send(shortened);
       } else {
@@ -33,7 +35,7 @@ module.exports = {
             return next(err);
           }
           // hash url._id with btoa module and return as short_url
-          shortened.short_url = btoa(url._id);
+          shortened.short_url = projectUrl + '/' + btoa(url._id);
           // return short url to user
           res.send(shortened);
         });
