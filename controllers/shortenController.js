@@ -42,5 +42,20 @@ module.exports = {
       }
     })
 
+  },
+
+  // retrieve a url from its short url
+  expand: function(req, res, next) {
+    var shortUrl = req.params.shortUrl;
+    var urlId = atob(shortUrl);
+
+    Url.findById(urlId, function(err, url) {
+      if(err) {
+        return next(err);
+      }
+      console.log(url);
+      res.redirect('http://' + url.url);
+    })
   }
+
 }

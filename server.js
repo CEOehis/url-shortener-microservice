@@ -2,6 +2,8 @@ var express = require('express');
 var app = express();
 
 var Counter = require('./models/counter');
+var shortenController = require('./controllers/shortenController');
+
 //set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost:27017/urlshortenerDB';
@@ -40,6 +42,8 @@ app.set('view engine', 'pug');
 app.get('/', function(req, res) {
   res.render('index', {title: 'url-shortener'});
 });
+
+app.get('/:shortUrl', shortenController.expand);
 
 app.use('/api/shorten', shortenRouter);
 
