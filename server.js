@@ -24,7 +24,7 @@ Counter.find({_id: 'counter_table'}, function(err, res) {
   }
   // initialize counter collection with starting value
   var counter = new Counter({
-    count: 10000
+    count: 100
   })
   counter.save(function(err) {
     if(err) throw err;
