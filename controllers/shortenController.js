@@ -1,6 +1,8 @@
 var Url = require('../models/url');
 var btoa = require('btoa');
 var atob = require('atob');
+// var urlChecker = require('../utils/urlChecker');
+var urlChecker = require('../utils/urlChecker');
 
 module.exports = {
 
@@ -8,6 +10,11 @@ module.exports = {
   shorten: function(req, res, next) {
     var projectUrl = req.protocol + '://' + req.get('host');
     var urlToBeShortened = req.params['0'].slice(1);
+
+    if(!urlChecker.isValidUrl(urlToBeShortened)) {
+      return res.send({ error: 'Wrong URL format. make sure to provide a valid protocol'});
+    }
+
     // object to hold shortener result
     var shortened = {
       original_url: urlToBeShortened
